@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Study Material Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Base body styles for the entire page */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Stack header and content */
+            align-items: center;
+            justify-content: flex-start; /* Align content to the start, header comes first */
+            padding: 0; /* Remove body padding, header will handle it */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative; /* Needed for z-index of main content or if pseudo-element is absolute */
+        }
+
+        /* Pseudo-element for the fixed background image with transparency */
+        body::before {
+            content: "";
+            position: fixed; /* Fixed relative to the viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Puts it behind all other content */
+            background-image: url("./Prince-background-img.jpg"); /* Your background image path */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: rgba(0, 51, 153, 0.7); /* Semi-transparent deep blue overlay */
+            background-blend-mode: overlay; /* Blends image with color */
+            transition: background-image 0.5s ease-in-out, background-color 0.5s ease-in-out, background-blend-mode 0.5s ease-in-out;
+        }
+
+        /* Header Specific Styles */
+        .common-header {
+            width: 100%; /* Full width header */
+            background-color: #003399; /* Updated header color */
+            padding: 1rem 2rem; /* Padding inside the header */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* Shadow */
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Space out logo and text */
+            z-index: 10; /* Ensure header is on top of content */
+            position: sticky; /* Make it stick to the top */
+            top: 0;
+            border-bottom-left-radius: 0.75rem; /* Rounded bottom corners */
+            border-bottom-right-radius: 0.75rem;
+            color: #ffffff; /* Ensure text is white for contrast */
+        }
+
+        .common-header .logo {
+            height: 70px; /* Increased logo size for better visibility */
+            width: auto;
+            
+        }
+
+        .common-header .header-text {
+            font-size: 1.8rem; /* Slightly larger text */
+            font-weight: 800; /* Extra bold */
+        }
+
+        /* Wrapper for the main content */
+        #mainContentWrapper {
+            flex-grow: 1; /* Allows this wrapper to take up remaining vertical space */
+            display: flex;
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+            width: 100%;
+            padding: 2rem 1rem; /* Add padding to prevent content from touching edges */
+            z-index: 1; /* Ensure content is above the pseudo-element background */
+        }
+
+        /* Styling for the Home Screen buttons */
+        #homeScreen .button-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2rem;
+                max-width: 400px;
+                width: 90%;
+                text-align: center;
+                background-color: rgba(255, 255, 255, 0.85);
+                border-radius: 1rem;
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+                animation: fadeInScale 0.7s ease-in-out;
+            }
+
+
+        #homeScreen .main-button {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            border-radius: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(to right, #003399, #0052cc);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
+        #homeScreen .main-button:hover {
+            background: linear-gradient(to right, #002366, #003399);
+            transform: translateY(-3px);
+        }
+
+
+        #homeScreen .main-button:active {
+            transform: translateY(0);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+
+        /* Common styles for login screens and main portal container */
+        #studentLoginScreen > div,
+        #adminLoginScreen > div {
+            background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Custom styles for input focus to match theme */
+        input:focus {
+            outline: none;
+            border-color: #0044BB; /* Slightly lighter shade for focus border */
+            box-shadow: 0 0 0 3px rgba(0, 51, 153, 0.4); /* Soft blue glow based on #003399 */
+        }
+
+        /* Login Button Color */
+        .login-button {
+            background-color: #003399; /* Updated button background */
+            color: #ffffff;
+        }
+        .login-button:hover {
+            background-color: #002277; /* Darker on hover */
+        }
+        .login-button:focus {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 0 4px #003399; /* Focus ring for button */
+        }
+
+        /* Back button styling */
+        .back-button {
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #f1f5f9; /* Light grey */
+            color: #4a5568; /* Dark grey text */
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+        .back-button:hover {
+            background-color: #e2e8f0;
+            border-color: #cbd5e0;
+        }
+        .back-button svg {
+            margin-right: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+        }
+
+
+        /* Link Color (e.g., "Contact Support") */
+        a {
+            color: #003399; /* Use new color for links */
+        }
+        a:hover {
+            color: #002277; /* Darker on hover */
+        }
+
+        /* Error message color (kept red for clear contrast) */
+        .error-message {
+            color: #dc2626; /* red-600 */
+        }
+
+        /* Container for the main portal content, max-width for readability */
+        .portal-content-container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* Styling for main accordion items (Departments) */
+        .accordion-item {
+            border-radius: 0.75rem; /* rounded-lg from Tailwind */
+            margin-bottom: 1rem;
+            overflow: hidden; /* Ensures rounded corners are applied correctly */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05); /* shadow-lg from Tailwind */
+        }
+        /* Styling for accordion buttons (Department names) */
+        .accordion-button {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            color: #1a202c; /* neutral-900 */
+            font-weight: 700; /* font-bold */
+            padding: 1.25rem 1.75rem; /* More padding for a bolder look */
+            text-align: left;
+            width: 100%;
+            border: none;
+            transition: background-color 0.2s ease-in-out;
+            border-radius: 0.75rem; /* Match accordion-item border-radius */
+            position: relative; /* For the arrow icon */
+            display: flex; /* Ensure flex for arrow positioning */
+            align-items: center;
+            justify-content: space-between; /* Space between text and arrow */
+            cursor: pointer; /* Indicate clickable */
+        }
+        /* Arrow icon for buttons (adjusted fill color if needed, but black is usually fine) */
+        .accordion-button::after {
+            flex-shrink: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-left: 1rem; /* Space between text and arrow */
+            content: "";
+            /* Using a darker fill for the arrow for better visibility against lighter expanded background */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333333'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Styling for the accordion button when expanded */
+        .accordion-button.expanded {
+            background-color: rgba(230, 233, 242, 0.9); /* A light grey-blue that complements #003399 */
+            color: #003399; /* Main accent color for expanded title */
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,.125); /* Subtle bottom border */
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        /* Rotate arrow when button is expanded */
+        .accordion-button.expanded::after {
+            transform: rotate(-180deg);
+        }
+        /* Focus state for accessibility */
+        .accordion-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(0, 51, 153, 0.25); /* Focus ring based on new color */
+        }
+
+        /* Styling for collapsable content sections (accordion-body) */
+        .accordion-body-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+            padding-top: 0; /* Initial padding top for collapsed state */
+            padding-bottom: 0; /* Initial padding bottom for collapsed state */
+            background-color: rgba(248, 250, 255, 0.9); /* Very light blue/off-white with transparency */
+            border-top: 1px solid #dbe2ed; /* Lighter border */
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+            visibility: hidden; /* Hide content when collapsed */
+        }
+
+        .accordion-body-content.show {
+            max-height: 1000px; /* A value larger than any possible content height */
+            opacity: 1;
+            padding: 1.5rem; /* Revert to original padding */
+            visibility: visible; /* Show content when expanded */
+        }
+
+        /* Custom styles for nested accordions (Years) */
+        .year-accordion .accordion-item {
+            margin-bottom: 0.75rem; /* Smaller margin for nested items */
+            box-shadow: none; /* No shadow for nested items */
+            border: 1px solid #e2e8f0; /* Light border */
+            border-radius: 0.5rem; /* Slightly smaller border-radius */
+        }
+        .year-accordion .accordion-button {
+            background-color: rgba(239, 243, 249, 0.9); /* Even lighter grey-blue for year buttons */
+            color: #2d3748; /* neutral-800, good contrast */
+            font-size: 1.05rem; /* Slightly smaller font for years */
+            font-weight: 600; /* font-semibold */
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .year-accordion .accordion-button.expanded {
+            background-color: rgba(216, 224, 237, 0.9); /* Slightly darker light blue when expanded */
+            color: #003399; /* Main accent color */
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .year-accordion .accordion-body-content {
+            background-color: rgba(255, 255, 255, 0.9); /* White background for semester lists with transparency */
+            border-radius: 0.5rem;
+            margin-top: 0; /* Sit flush with the button */
+            border-top: 1px solid #e2e8f0;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .year-accordion .accordion-body-content.show {
+            padding: 1rem 1.5rem; /* Adjusted padding for nested accordions */
+        }
+
+        /* Styling for the list of semesters */
+        .list-group-item {
+            background-color: transparent;
+            border: none;
+            padding: 0.6rem 0; /* Smaller padding for list items */
+            font-weight: 500; /* medium */
+        }
+        .list-group-item a {
+            color: #003399; /* Main accent color for semester links */
+            text-decoration: none;
+            transition: color 0.2s ease-in-out; /* Smooth hover effect */
+        }
+        .list-group-item a:hover {
+            color: #002277; /* Darker on hover */
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 767px) {
+            .common-header {
+                padding: 0.75rem 1rem;
+                flex-direction: column; /* Stack items on small screens */
+                text-align: center;
+            }
+            .common-header .header-text {
+                font-size: 1.3rem;
+                margin-top: 0.5rem;
+            }
+            .common-header .logo {
+                height: 40px; /* Adjust logo size for mobile */
+            }
+            .accordion-button {
+                padding: 1rem 1.25rem;
+                font-size: 1.125rem; /* text-lg */
+            }
+            .accordion-body-content.show {
+                padding: 1rem;
+            }
+            .year-accordion .accordion-button {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            .year-accordion .accordion-body-content.show {
+                padding: 0.75rem 1rem;
+            }
+            .list-group-item {
+                padding: 0.5rem 0;
+            }
+            h1 {
+                font-size: 2.2rem; /* Adjusted for mobile view */
+                /* Portal title remains white for contrast with background */
+            }
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .fade-slide-in {
+            animation: fadeSlideIn 0.5s ease-in-out;
+            }
+            @keyframes fadeSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+
+        @media (max-width: 640px) {
+            .common-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .common-header .logo {
+                height: 45px;
+            }
+
+            .header-text {
+                font-size: 1.3rem;
+                margin-top: 0.5rem;
+            }
+
+            #homeScreen .main-button {
+                font-size: 1.1rem;
+                padding: 1rem;
+            }
+
+            h2, p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            html, body {
+                overflow-x: hidden !important;
+                width: 100%;
+            }
+
+            .container, 
+            .portal-content-container, 
+            .button-container {
+                max-width: 100vw !important;
+                overflow-x: hidden;
+            }
+
+            .main-button {
+                word-break: break-word;
+            }
+
+            .accordion-button span {
+                font-size: 1rem !important;
+            }
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <header class="common-header">
+        <img src="prince-header-img.png" alt="Prince College Logo" class="logo">
+        <span class="header-text font-bold tracking-wide">
+            <span class="text-white">Agile</span><span class="text-yellow-300">Assembly</span>
+        </span>
+    </header>
+
+    <div id="mainContentWrapper">
+
+        <div id="homeScreen" class="container mx-auto flex flex-col items-center justify-center px-4 max-w-full sm:max-w-xl overflow-x-hidden">
+            <div class="button-container">
+                <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-2">Prince EDU Portal</h2>
+                <p class="text-center text-gray-600 text-base font-medium mb-6">
+                Access semester-wise notes, resources, and academic materials instantly.
+                </p>
+
+                <button id="studentButton" class="main-button">Student Login</button>
+                <button id="adminButton" class="main-button">Faculty Login</button>
+            </div>
+        </div>
+
+        <div id="studentLoginScreen" class="container mx-auto hidden">
+            <div class="max-w-md mx-auto rounded-xl shadow-2xl overflow-hidden md:max-w-xl">
+                <div class="md:flex">
+                    <div class="w-full p-8">
+                        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-6">Student Login</h2>
+                        <p class="text-center text-gray-600 mb-8">Access your study materials</p>
+
+                        <form id="studentLoginForm" class="space-y-6">
+                            <div>
+                                <label for="studentUsername" class="block text-sm font-medium text-gray-700 mb-1">Email (Username)</label>
+                                <input type="email" id="studentUsername" name="username" placeholder="STUDENT_USERNAME"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+                            <div>
+                                <label for="studentPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                <input type="password" id="studentPassword" name="password" placeholder="••••••••"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+                            <div id="studentErrorMessage" class="error-message text-sm font-semibold text-center mt-2 hidden">
+                                </div>
+                            <button type="button" id="accessStudentPortalButton"
+                                    class="w-full flex justify-center py-3 px-4 mt-6 border border-transparent rounded-md shadow-sm text-lg font-semibold login-button
+                                           transition ease-in-out duration-150">
+                                Access Portal
+                            </button>
+                            <div class="text-center mt-6">
+                                <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                    Having trouble? Contact Support
+                                </a>
+                            </div>
+                        </form>
+                        <button type="button" id="backToHomeFromStudentLogin" class="back-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd" />
+                            </svg>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="adminLoginScreen" class="container mx-auto hidden">
+            <div class="max-w-md mx-auto rounded-xl shadow-2xl overflow-hidden md:max-w-xl">
+                <div class="md:flex">
+                    <div class="w-full p-8">
+                        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-6">Faculty Login</h2>
+                        <p class="text-center text-gray-600 mb-8">Manage academic resources</p>
+
+                        <form id="adminLoginForm" class="space-y-6">
+                            <div>
+                                <label for="adminUsername" class="block text-sm font-medium text-gray-700 mb-1">Email (Username)</label>
+                                <input type="email" id="adminUsername" name="username" placeholder="ADMIN_USERNAME"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+                            <div>
+                                <label for="adminPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                                <input type="password" id="adminPassword" name="password" placeholder="••••••••"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                       required>
+                            </div>
+                            <div id="adminErrorMessage" class="error-message text-sm font-semibold text-center mt-2 hidden">
+                                </div>
+                            <button type="button" id="accessAdminControlButton"
+                                    class="w-full flex justify-center py-3 px-4 mt-6 border border-transparent rounded-md shadow-sm text-lg font-semibold login-button
+                                           transition ease-in-out duration-150">
+                                Login as Faculty
+                            </button>
+                        </form>
+                        <button type="button" id="backToHomeFromAdminLogin" class="back-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd" />
+                            </svg>
+                            Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="adminControlPanel" class="portal-content-container hidden px-4 max-w-full sm:max-w-3xl overflow-x-hidden">
+            <div class="bg-white rounded-xl shadow-2xl p-8 mb-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-center text-gray-800 mb-6"> Faculty DashBoard </h1>
+                
+                <div class="space-y-6">
+                    <div class="border p-6 rounded-lg bg-blue-50 bg-opacity-80">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Manage Study Materials</h3>
+                        <p class="text-gray-700 mb-4">Here you can add, edit, or remove subjects, semesters, and their study materials.</p>
+                        
+                        <button id="removeMaterialButton" class="w-full py-3 px-4 rounded-md text-lg font-semibold login-button mt-4">
+                            Update Study Materials
+                        </button>
+                    </div>
+                    </div>
+                <button type="button" id="logoutAdminButton" class="back-button w-full justify-center mt-8">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3.75 4.5a.75.75 0 0 0-.75.75v10.5a.75.75 0 0 0 .75.75h10.5a.75.75 0 0 0 .75-.75V8.25a.75.75 0 0 1 1.5 0v7.5A2.25 2.25 0 0 1 14.25 18H3.75A2.25 2.25 0 0 1 1.5 15.75V5.25A2.25 2.25 0 0 1 3.75 3H9a.75.75 0 0 1 0 1.5H3.75Z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M15.31 5.47a.75.75 0 0 1 0 1.06l-1.47 1.47a.75.75 0 0 1-1.06-.02L9.77 4.22a.75.75 0 0 1-.02-1.06l1.47-1.47a.75.75 0 0 1 1.06.02l2.5 2.375Z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M18 10a.75.75 0 0 1-.75.75H10a.75.75 0 0 1 0-1.5h7.25A.75.75 0 0 1 18 10Z" clip-rule="evenodd" />
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </div>
+
+
+        <div id="portalScreen" class="portal-content-container hidden px-4 max-w-full sm:max-w-5xl overflow-x-hidden">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-center text-white mb-8 leading-tight">
+                PRINCE STUDY MATERIAL PORTAL
+            </h1>
+
+            <div class="accordion" id="departmentsAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingIT">
+                        <button class="accordion-button" type="button" data-target="#collapseIT" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Information Technology (IT)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseIT" class="accordion-body-content">
+                        <div class="year-accordion" id="itYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear1">
+                                        Year 1
+                                    </button>
+                                </h2>
+                                <div id="collapseITYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM1 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM2 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear2">
+                                        Year 2
+                                    </button>
+                                </h2>
+                                <div id="collapseITYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM3 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="https://drive.google.com/drive/folders/17fUS7YzfL001mcFGnRAUtTWihcz7F_qW?usp=drive_link" target="_blank">SEM4 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear3">
+                                        Year 3
+                                    </button>
+                                </h2>
+                                <div id="collapseITYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="https://drive.google.com/drive/folders/1IVVzJ_SJ7XwF8mNQWitE9ALsOFn_Sted?usp=drive_link">SEM5 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM6 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear4">
+                                        Year 4
+                                    </button>
+                                </h2>
+                                <div id="collapseITYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM7 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM8 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingCSE">
+                        <button class="accordion-button" type="button" data-target="#collapseCSE" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Computer Science and Engineering (CSE)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseCSE" class="accordion-body-content">
+                        <div class="year-accordion" id="cseYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear1">
+                                        Year 1
+                                    </button>
+                                </h2>
+                                <div id="collapseCSEYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM1 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM2 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear2">
+                                        Year 2
+                                    </button>
+                                </h2>
+                                <div id="collapseCSEYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM3 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM4 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear3">
+                                        Year 3
+                                    </button>
+                                </h2>
+                                <div id="collapseCSEYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM5 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM6 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear4">
+                                        Year 4
+                                    </button>
+                                </h2>
+                                <div id="collapseCSEYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM7 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM8 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingECE">
+                        <button class="accordion-button" type="button" data-target="#collapseECE" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Electronics and Communication Engineering (ECE)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseECE" class="accordion-body-content">
+                        <div class="year-accordion" id="eceYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear1">
+                                        Year 1
+                                    </button>
+                                </h2>
+                                <div id="collapseECEYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM1 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM2 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear2">
+                                        Year 2
+                                    </button>
+                                </h2>
+                                <div id="collapseECEYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM3 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM4 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear3">
+                                        Year 3
+                                    </button>
+                                </h2>
+                                <div id="collapseECEYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM5 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM6 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear4">
+                                        Year 4
+                                    </button>
+                                </h2>
+                                <div id="collapseECEYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM7 - Google Drive Link</a></li>
+                                                    <li class="list-group-item"><a href="#">SEM8 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingEEE">
+                        <button class="accordion-button" type="button" data-target="#collapseEEE" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Electrical and Electronics Engineering (EEE)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseEEE" class="accordion-body-content">
+                        <div class="year-accordion" id="eeeYearsAccordion">
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear1">
+                                        Year 1
+                                    </button>
+                                </h2>
+                                <div id="collapseEEEYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM1 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM2 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear2">
+                                        Year 2
+                                    </button>
+                                </h2>
+                                <div id="collapseEEEYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM3 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM4 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear3">
+                                        Year 3
+                                    </button>
+                                </h2>
+                                <div id="collapseEEEYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM5 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM6 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear4">
+                                        Year 4
+                                    </button>
+                                </h2>
+                                <div id="collapseEEEYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM7 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM8 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingCIVIL">
+                        <button class="accordion-button" type="button" data-target="#collapseCIVIL" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Civil Engineering (CIVIL)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseCIVIL" class="accordion-body-content">
+                        <div class="year-accordion" id="civilYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear1">
+                                        Year 1
+                                    </button>
+                                </h2>
+                                <div id="collapseCIVILYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM1 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM2 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear2">
+                                        Year 2
+                                    </button>
+                                </h2>
+                                <div id="collapseCIVILYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM3 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM4 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear3">
+                                        Year 3
+                                    </button>
+                                </h2>
+                                <div id="collapseCIVILYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM5 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM6 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear4">
+                                        Year 4
+                                    </button>
+                                </h2>
+                                <div id="collapseCIVILYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM7 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM8 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingMECH">
+                        <button class="accordion-button" type="button" data-target="#collapseMECH" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Mechanical Engineering (MECH)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseMECH" class="accordion-body-content">
+                        <div class="year-accordion" id="mechYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear1">
+                                        Year 1
+                                    </button>
+                                </h2>
+                                <div id="collapseMECHYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM1 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM2 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear2">
+                                        Year 2
+                                    </button>
+                                </h2>
+                                <div id="collapseMECHYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM3 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM4 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear3">
+                                        Year 3
+                                    </button>
+                                </h2>
+                                <div id="collapseMECHYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM5 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM6 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear4">
+                                        Year 4
+                                    </button>
+                                </h2>
+                                <div id="collapseMECHYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><a href="#">SEM7 - Google Drive Link</a></li>
+                                        <li class="list-group-item"><a href="#">SEM8 - Google Drive Link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="backToHomeFromPortal" class="back-button w-full justify-center mt-8">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd" />
+                </svg>
+                Back to Home
+            </button>
+        </div>
+    </div>
+
+<script>
+// SHA-256 Hash Function
+async function hashSHA256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const homeScreen = document.getElementById('homeScreen');
+    const studentLoginScreen = document.getElementById('studentLoginScreen');
+    const adminLoginScreen = document.getElementById('adminLoginScreen');
+    const adminControlPanel = document.getElementById('adminControlPanel');
+    const portalScreen = document.getElementById('portalScreen');
+
+    const studentButton = document.getElementById('studentButton');
+    const adminButton = document.getElementById('adminButton');
+    const accessStudentPortalButton = document.getElementById('accessStudentPortalButton');
+    const accessAdminControlButton = document.getElementById('accessAdminControlButton');
+    const logoutAdminButton = document.getElementById('logoutAdminButton');
+    const removeMaterialButton = document.getElementById('removeMaterialButton');
+
+    const backToHomeFromStudentLogin = document.getElementById('backToHomeFromStudentLogin');
+    const backToHomeFromAdminLogin = document.getElementById('backToHomeFromAdminLogin');
+    const backToHomeFromPortal = document.getElementById('backToHomeFromPortal');
+
+    const studentUsernameInput = document.getElementById('studentUsername');
+    const studentPasswordInput = document.getElementById('studentPassword');
+    const studentErrorMessage = document.getElementById('studentErrorMessage');
+
+    const adminUsernameInput = document.getElementById('adminUsername');
+    const adminPasswordInput = document.getElementById('adminPassword');
+    const adminErrorMessage = document.getElementById('adminErrorMessage');
+
+    const PASSWORD_HASH = "a95f1c9a5af61af719e2538917169c2b57730343366e156de723c344f0521ec7";
+    
+
+    const STUDENT_USERNAME = 'psvpec.2025.students@gmail.com';
+    const ADMIN_USERNAME = 'psvpec.2025.staffs@gmail.com';
+    const ADMIN_REMOVE_DRIVE_LINK = 'https://drive.google.com/drive/folders/1-WCLZr1tug6FEQERSxulc2p92wZ0bs_E?usp=sharing';
+
+    function showScreen(screenToShow) {
+        [homeScreen, studentLoginScreen, adminLoginScreen, adminControlPanel, portalScreen].forEach(screen => {
+            screen.classList.add('hidden');
+        });
+        screenToShow.classList.remove('hidden');
+    }
+
+    // Session Restore on Page Load
+    const session = localStorage.getItem('loggedInAs');
+    const loginTime = parseInt(localStorage.getItem('loginTime'), 10);
+    const now = Date.now();
+    const THIRTY_MINUTES = 30 * 60 * 1000;
+
+    if (session && loginTime && now - loginTime < THIRTY_MINUTES) {
+        if (session === 'student') showScreen(portalScreen);
+        else if (session === 'admin') showScreen(adminControlPanel);
+    } else {
+        localStorage.clear();
+        showScreen(homeScreen);
+    }
+
+    // Navigation
+    studentButton.addEventListener('click', () => {
+        showScreen(studentLoginScreen);
+        studentUsernameInput.value = '';
+        studentPasswordInput.value = '';
+        studentErrorMessage.classList.add('hidden');
+        studentUsernameInput.focus();
+    });
+
+    adminButton.addEventListener('click', () => {
+        showScreen(adminLoginScreen);
+        adminUsernameInput.value = '';
+        adminPasswordInput.value = '';
+        adminErrorMessage.classList.add('hidden');
+        adminUsernameInput.focus();
+    });
+
+    backToHomeFromStudentLogin.addEventListener('click', () => showScreen(homeScreen));
+    backToHomeFromAdminLogin.addEventListener('click', () => showScreen(homeScreen));
+    backToHomeFromPortal.addEventListener('click', () => showScreen(homeScreen));
+
+    // Student Login
+    accessStudentPortalButton.addEventListener('click', async () => {
+        const username = studentUsernameInput.value.trim();
+        const password = studentPasswordInput.value.trim();
+        studentErrorMessage.classList.add('hidden');
+
+        if (!username || !password) {
+            studentErrorMessage.textContent = 'Please enter both username and password.';
+            studentErrorMessage.classList.remove('hidden');
+            return;
+        }
+
+        const hash = await hashSHA256(password);
+        if (username === STUDENT_USERNAME && hash === PASSWORD_HASH) {
+            localStorage.setItem('loggedInAs', 'student');
+            localStorage.setItem('loginTime', Date.now().toString());
+            showScreen(portalScreen);
+        } else {
+            studentErrorMessage.textContent = 'Invalid username or password.';
+            studentErrorMessage.classList.remove('hidden');
+        }
+    });
+
+    // Admin Login
+    accessAdminControlButton.addEventListener('click', async () => {
+        const username = adminUsernameInput.value.trim();
+        const password = adminPasswordInput.value.trim();
+        adminErrorMessage.classList.add('hidden');
+
+        if (!username || !password) {
+            adminErrorMessage.textContent = 'Please enter both username and password.';
+            adminErrorMessage.classList.remove('hidden');
+            return;
+        }
+
+        const hash = await hashSHA256(password);
+        if (username === ADMIN_USERNAME && hash === PASSWORD_HASH) {
+            localStorage.setItem('loggedInAs', 'admin');
+            localStorage.setItem('loginTime', Date.now().toString());
+            showScreen(adminControlPanel);
+        } else {
+            adminErrorMessage.textContent = 'Invalid username or password.';
+            adminErrorMessage.classList.remove('hidden');
+        }
+    });
+
+    // Logout
+    logoutAdminButton.addEventListener('click', () => {
+        if (confirm("Are you sure you want to log out?")) {
+            localStorage.clear();
+            showScreen(homeScreen);
+        }
+    });
+
+    // Update Study Materials Button
+    removeMaterialButton.addEventListener('click', () => {
+        console.log('Opening update link...');
+        window.open(ADMIN_REMOVE_DRIVE_LINK, '_blank');
+    });
+
+    
+
+    // Accordion Logic
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+    accordionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.dataset.target;
+            const targetContent = document.querySelector(targetId);
+            if (!targetContent) return;
+
+            const parentAccordionId = button.dataset.parentAccordion;
+            if (parentAccordionId) {
+                const parentAccordion = document.querySelector(parentAccordionId);
+                if (parentAccordion) {
+                    const allDepartmentContents = parentAccordion.querySelectorAll(':scope > .accordion-item > .accordion-body-content');
+                    allDepartmentContents.forEach(content => {
+                        if (content !== targetContent && content.classList.contains('show')) {
+                            content.classList.remove('show');
+                            const associatedButton = content.previousElementSibling.querySelector('.accordion-button');
+                            if (associatedButton) associatedButton.classList.remove('expanded');
+                        }
+                    });
+                }
+            }
+
+            targetContent.classList.toggle('show');
+            button.classList.toggle('expanded');
+            const isExpanded = targetContent.classList.contains('show');
+            button.setAttribute('aria-expanded', isExpanded);
+        });
+    });
+});
+</script>
+
+
+
+    <footer class="w-full bg-gradient-to-r from-blue-900 to-indigo-950 text-white py-6 shadow-inner">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-200">
+        <div class="mb-2 sm:mb-0 text-center sm:text-left">
+        &copy; 2025 <span class="font-semibold">Prince Shri Venkateshwara Padmavathy Engineering College</span>
+        </div>
+        <div class="text-center sm:text-right">
+        Powered by <span class="font-semibold">Agile Assembly</span>
+        </div>
+    </div>
+    </footer>
+
+
+</body>
+
+</html>
