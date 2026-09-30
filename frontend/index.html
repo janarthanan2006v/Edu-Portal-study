@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Study Material Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Base body styles for the entire page */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; /* Stack header and content */
+            align-items: center;
+            justify-content: flex-start; /* Align content to the start */
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Fixed background image with transparency overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url("./Prince-background-img.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: rgba(0, 51, 153, 0.7); /* Deep blue overlay */
+            background-blend-mode: overlay;
+        }
+
+        /* Header Specific Styles */
+        .common-header {
+            width: 100%;
+            background-color: #003399;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+            position: sticky;
+            top: 0;
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+            color: #ffffff;
+        }
+
+        .common-header .logo {
+            height: 70px;
+            width: auto;
+        }
+
+        .common-header .header-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        /* Wrapper for the main content */
+        #mainContentWrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 2rem 1rem;
+            z-index: 1;
+        }
+
+        /* Home Screen Card */
+        #homeScreen .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 1rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: fadeInScale 0.7s ease-in-out;
+        }
+
+        #homeScreen .main-button {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            border-radius: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(to right, #003399, #0052cc);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        #homeScreen .main-button:hover {
+            background: linear-gradient(to right, #002366, #003399);
+            transform: translateY(-3px);
+        }
+
+        #homeScreen .main-button:active {
+            transform: translateY(0);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form screens layout */
+        #studentLoginScreen > div,
+        #adminLoginScreen > div {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #0044BB;
+            box-shadow: 0 0 0 3px rgba(0, 51, 153, 0.4);
+        }
+
+        .login-button {
+            background-color: #003399;
+            color: #ffffff;
+        }
+
+        .login-button:hover {
+            background-color: #002277;
+        }
+
+        .back-button {
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .back-button:hover {
+            background-color: #e2e8f0;
+            border-color: #cbd5e0;
+        }
+
+        .back-button svg {
+            margin-right: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .portal-content-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* Accordion custom CSS styling */
+        .accordion-item {
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .accordion-button {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #1a202c;
+            font-weight: 700;
+            padding: 1.25rem 1.75rem;
+            text-align: left;
+            width: 100%;
+            border: none;
+            transition: background-color 0.2s ease-in-out;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .accordion-button::after {
+            flex-shrink: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-left: 1rem;
+            content: "";
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333333'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-size: 1.25rem;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .accordion-button.expanded {
+            background-color: rgba(230, 233, 242, 0.9);
+            color: #003399;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .accordion-button.expanded::after {
+            transform: rotate(-180deg);
+        }
+
+        .accordion-body-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out;
+            padding-top: 0;
+            padding-bottom: 0;
+            background-color: rgba(248, 250, 255, 0.9);
+            border-top: 1px solid #dbe2ed;
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+            visibility: hidden;
+        }
+
+        .accordion-body-content.show {
+            max-height: 1000px;
+            opacity: 1;
+            padding: 1.5rem;
+            visibility: visible;
+        }
+
+        /* Nested accordion styles (Years) */
+        .year-accordion .accordion-item {
+            margin-bottom: 0.75rem;
+            box-shadow: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+        }
+
+        .year-accordion .accordion-button {
+            background-color: rgba(239, 243, 249, 0.9);
+            color: #2d3748;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .year-accordion .accordion-button.expanded {
+            background-color: rgba(216, 224, 237, 0.9);
+            color: #003399;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .year-accordion .accordion-body-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid #e2e8f0;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+
+        .year-accordion .accordion-body-content.show {
+            padding: 1rem 1.5rem;
+        }
+
+        .list-group-item {
+            background-color: transparent;
+            border: none;
+            padding: 0.6rem 0;
+            font-weight: 600;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+        }
+
+        .list-group-item::before {
+            content: "•";
+            color: #003399;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-right: 0.5em;
+        }
+
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .fade-slide-in {
+            animation: fadeSlideIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeSlideIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <header class="common-header">
+        <img src="prince-header-img.png" alt="Prince College Logo" class="logo">
+        <span class="header-text font-bold tracking-wide">
+            <span class="text-white">Agile</span><span class="text-yellow-300">Assembly</span>
+        </span>
+    </header>
+
+    <div id="mainContentWrapper">
+        <!-- Home Screen -->
+        <div id="homeScreen" class="container mx-auto flex flex-col items-center justify-center px-4 max-w-full sm:max-w-xl overflow-x-hidden">
+            <div class="button-container">
+                <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-2">Prince EDU Portal</h2>
+                <p class="text-center text-gray-600 text-base font-medium mb-6">
+                    Access study notes, labs, and academic resources securely.
+                </p>
+                <button id="studentButton" class="main-button">Student Login</button>
+                <button id="adminButton" class="main-button">Faculty Login</button>
+            </div>
+        </div>
+
+        <!-- Student Login Screen -->
+        <div id="studentLoginScreen" class="container mx-auto hidden">
+            <div class="max-w-md mx-auto rounded-xl shadow-2xl overflow-hidden md:max-w-xl">
+                <div class="w-full p-8">
+                    <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-2">Student Login</h2>
+                    <p class="text-center text-gray-600 mb-6">Access your study materials</p>
+
+                    <form id="studentLoginForm" class="space-y-6">
+                        <div>
+                            <label for="studentUsername" class="block text-sm font-medium text-gray-700 mb-1">Email (Username)</label>
+                            <input type="email" id="studentUsername" placeholder="student@gmail.com"
+                                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="studentPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <input type="password" id="studentPassword" placeholder="••••••••"
+                                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                   required>
+                        </div>
+                        <div id="studentErrorMessage" class="error-message text-sm font-semibold text-center mt-2 hidden text-red-600"></div>
+                        <button type="submit" id="accessStudentPortalButton"
+                                class="w-full flex justify-center py-3 px-4 mt-6 border border-transparent rounded-md shadow-sm text-lg font-semibold login-button transition ease-in-out duration-150">
+                            Access Portal
+                        </button>
+                        <div class="text-center mt-6">
+                            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                Having trouble? Contact Support
+                            </a>
+                        </div>
+                    </form>
+                    <button type="button" id="backToHomeFromStudentLogin" class="back-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd" />
+                        </svg>
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Login Screen -->
+        <div id="adminLoginScreen" class="container mx-auto hidden">
+            <div class="max-w-md mx-auto rounded-xl shadow-2xl overflow-hidden md:max-w-xl">
+                <div class="w-full p-8">
+                    <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-2">Faculty Login</h2>
+                    <p class="text-center text-gray-600 mb-6">Manage academic resources</p>
+
+                    <form id="adminLoginForm" class="space-y-6">
+                        <div>
+                            <label for="adminUsername" class="block text-sm font-medium text-gray-700 mb-1">Email (Username)</label>
+                            <input type="email" id="adminUsername" placeholder="faculty@gmail.com"
+                                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="adminPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <input type="password" id="adminPassword" placeholder="••••••••"
+                                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                   required>
+                        </div>
+                        <div id="adminErrorMessage" class="error-message text-sm font-semibold text-center mt-2 hidden text-red-600"></div>
+                        <button type="submit" id="accessAdminControlButton"
+                                class="w-full flex justify-center py-3 px-4 mt-6 border border-transparent rounded-md shadow-sm text-lg font-semibold login-button transition ease-in-out duration-150">
+                            Login as Faculty
+                        </button>
+                    </form>
+                    <button type="button" id="backToHomeFromAdminLogin" class="back-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd" />
+                        </svg>
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Control Panel / Dashboard -->
+        <div id="adminControlPanel" class="portal-content-container hidden px-4 max-w-full sm:max-w-6xl overflow-x-hidden">
+            <div class="bg-white rounded-xl shadow-2xl p-8 mb-6 border border-white/20 backdrop-blur-md">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-extrabold text-gray-800">Faculty Dashboard</h1>
+                    <button type="button" id="logoutAdminButton" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md shadow-sm transition duration-150 flex items-center">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </button>
+                </div>
+
+                <!-- Add / Edit Material Section -->
+                <div class="border p-6 rounded-lg bg-blue-50/80 mb-8 border-blue-100">
+                    <h3 id="formTitle" class="text-2xl font-bold text-gray-800 mb-4">Add New Study Material</h3>
+                    
+                    <form id="materialForm" class="space-y-4">
+                        <input type="hidden" id="materialId">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="materialSubjectName" class="block text-sm font-medium text-gray-700 mb-1">Subject Name</label>
+                                <input type="text" id="materialSubjectName" required placeholder="e.g. Java Programming"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                            <div>
+                                <label for="materialDepartment" class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                                <select id="materialDepartment" required
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <option value="">Select Department</option>
+                                    <option value="Information Technology">Information Technology</option>
+                                    <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                                    <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                                    <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="materialCourseYear" class="block text-sm font-medium text-gray-700 mb-1">Course Year</label>
+                                <select id="materialCourseYear" required
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <option value="">Select Year</option>
+                                    <option value="Year 1">Year 1</option>
+                                    <option value="Year 2">Year 2</option>
+                                    <option value="Year 3">Year 3</option>
+                                    <option value="Year 4">Year 4</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="materialSem1" class="block text-sm font-medium text-gray-700 mb-1">Sem1 Google Drive Link</label>
+                                <input type="url" id="materialSem1" placeholder="https://drive.google.com/drive/folders/..."
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                            <div>
+                                <label for="materialSem2" class="block text-sm font-medium text-gray-700 mb-1">Sem2 Google Drive Link</label>
+                                <input type="url" id="materialSem2" placeholder="https://drive.google.com/drive/folders/..."
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input type="checkbox" id="materialActiveStatus" checked
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="materialActiveStatus" class="ml-2 block text-sm text-gray-900 font-semibold">Active / Visible to Students</label>
+                        </div>
+
+                        <div id="facultyFormMessage" class="hidden text-sm font-semibold p-2 rounded text-center"></div>
+
+                        <div class="flex gap-4">
+                            <button type="submit" id="saveMaterialBtn"
+                                    class="flex-1 py-2.5 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-md shadow transition duration-150">
+                                Save Material
+                            </button>
+                            <button type="button" id="clearFormBtn"
+                                    class="py-2.5 px-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-md transition duration-150">
+                                Clear / Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- View Materials Table Section -->
+                <div>
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+                        <h3 class="text-2xl font-bold text-gray-800">All Study Materials</h3>
+                        <div class="w-full md:w-64">
+                            <input type="text" id="tableSearch" placeholder="Filter by Subject Name..."
+                                   class="w-full px-4 py-1.5 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
+                            <thead class="bg-gray-100 font-bold text-gray-700">
+                                <tr>
+                                    <th class="px-6 py-3">Subject Name</th>
+                                    <th class="px-6 py-3">Department</th>
+                                    <th class="px-6 py-3">Year</th>
+                                    <th class="px-6 py-3 text-center">Sem1 Available</th>
+                                    <th class="px-6 py-3 text-center">Sem2 Available</th>
+                                    <th class="px-6 py-3 text-center">Status</th>
+                                    <th class="px-6 py-3 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="materialsTableBody" class="bg-white divide-y divide-gray-200 text-gray-600">
+                                <!-- Dynamic rows populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Portal Screen -->
+        <div id="portalScreen" class="portal-content-container hidden px-4 max-w-full sm:max-w-5xl overflow-x-hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight">
+                    PRINCE STUDY MATERIAL PORTAL
+                </h1>
+                <button type="button" id="logoutStudentButton" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md shadow-sm transition duration-150 flex items-center">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </button>
+            </div>
+
+            <!-- SEARCH CARD -->
+            <div class="bg-white bg-opacity-90 rounded-xl shadow-2xl p-6 mb-8 border border-white border-opacity-25 backdrop-filter backdrop-blur-md fade-slide-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-1">Search Study Material</h2>
+                <p class="text-sm text-gray-600 mb-6">Enter your subject name and semester to access the correct study material.</p>
+                
+                <form id="searchMaterialForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label for="searchSubjectName" class="block text-sm font-medium text-gray-700 mb-1">Subject Name</label>
+                        <input type="text" id="searchSubjectName" placeholder="Enter exact subject name" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="searchSemester" class="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                        <select id="searchSemester" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Select Semester</option>
+                            <option value="Sem1">Sem1</option>
+                            <option value="Sem2">Sem2</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" id="searchMaterialBtn" class="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-md shadow-sm transition duration-150 flex items-center justify-center">
+                            <i class="fas fa-search mr-2"></i> Search Material
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Loading spinner -->
+                <div id="searchLoading" class="hidden flex justify-center items-center mt-6">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                    <span class="ml-2 text-sm text-gray-600">Searching materials...</span>
+                </div>
+                
+                <!-- Error message -->
+                <div id="searchError" class="hidden mt-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm font-medium"></div>
+                
+                <!-- Result Card -->
+                <div id="searchResultCard" class="hidden mt-6 p-6 bg-green-50 border border-green-200 rounded-lg shadow-sm fade-slide-in">
+                    <h3 class="text-lg font-bold text-green-900 mb-4 flex items-center">
+                        <i class="fas fa-check-circle mr-2 text-green-600"></i> Study Material Found
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-700 mb-6">
+                        <div>
+                            <span class="block text-xs font-semibold text-gray-500 uppercase">Subject</span>
+                            <span id="resultSubjectName" class="font-semibold text-gray-900"></span>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-semibold text-gray-500 uppercase">Semester</span>
+                            <span id="resultSemester" class="font-semibold text-gray-900"></span>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-semibold text-gray-500 uppercase">Department</span>
+                            <span id="resultDepartment" class="font-semibold text-gray-900"></span>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-semibold text-gray-500 uppercase">Year</span>
+                            <span id="resultYear" class="font-semibold text-gray-900"></span>
+                        </div>
+                    </div>
+                    <button id="openDriveLinkBtn" class="py-2.5 px-6 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md shadow transition duration-150 inline-flex items-center">
+                        <i class="fab fa-google-drive mr-2"></i> Open Study Material
+                    </button>
+                </div>
+            </div>
+
+            <!-- Static Department Accordions (Links Removed) -->
+            <div class="accordion" id="departmentsAccordion">
+                <!-- IT -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingIT">
+                        <button class="accordion-button" type="button" data-target="#collapseIT" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Information Technology (IT)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseIT" class="accordion-body-content">
+                        <div class="year-accordion" id="itYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear1">Year 1</button>
+                                </h2>
+                                <div id="collapseITYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 1</li>
+                                        <li class="list-group-item">Semester 2</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear2">Year 2</button>
+                                </h2>
+                                <div id="collapseITYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 3</li>
+                                        <li class="list-group-item">Semester 4</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear3">Year 3</button>
+                                </h2>
+                                <div id="collapseITYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 5</li>
+                                        <li class="list-group-item">Semester 6</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingITYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseITYear4">Year 4</button>
+                                </h2>
+                                <div id="collapseITYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 7</li>
+                                        <li class="list-group-item">Semester 8</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CSE -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingCSE">
+                        <button class="accordion-button" type="button" data-target="#collapseCSE" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Computer Science and Engineering (CSE)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseCSE" class="accordion-body-content">
+                        <div class="year-accordion" id="cseYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear1">Year 1</button>
+                                </h2>
+                                <div id="collapseCSEYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 1</li>
+                                        <li class="list-group-item">Semester 2</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear2">Year 2</button>
+                                </h2>
+                                <div id="collapseCSEYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 3</li>
+                                        <li class="list-group-item">Semester 4</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear3">Year 3</button>
+                                </h2>
+                                <div id="collapseCSEYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 5</li>
+                                        <li class="list-group-item">Semester 6</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCSEYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseCSEYear4">Year 4</button>
+                                </h2>
+                                <div id="collapseCSEYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 7</li>
+                                        <li class="list-group-item">Semester 8</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ECE -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingECE">
+                        <button class="accordion-button" type="button" data-target="#collapseECE" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Electronics and Communication Engineering (ECE)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseECE" class="accordion-body-content">
+                        <div class="year-accordion" id="eceYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear1">Year 1</button>
+                                </h2>
+                                <div id="collapseECEYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 1</li>
+                                        <li class="list-group-item">Semester 2</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear2">Year 2</button>
+                                </h2>
+                                <div id="collapseECEYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 3</li>
+                                        <li class="list-group-item">Semester 4</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear3">Year 3</button>
+                                </h2>
+                                <div id="collapseECEYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 5</li>
+                                        <li class="list-group-item">Semester 6</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingECEYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseECEYear4">Year 4</button>
+                                </h2>
+                                <div id="collapseECEYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 7</li>
+                                        <li class="list-group-item">Semester 8</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EEE -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingEEE">
+                        <button class="accordion-button" type="button" data-target="#collapseEEE" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Electrical and Electronics Engineering (EEE)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseEEE" class="accordion-body-content">
+                        <div class="year-accordion" id="eeeYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear1">Year 1</button>
+                                </h2>
+                                <div id="collapseEEEYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 1</li>
+                                        <li class="list-group-item">Semester 2</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear2">Year 2</button>
+                                </h2>
+                                <div id="collapseEEEYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 3</li>
+                                        <li class="list-group-item">Semester 4</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear3">Year 3</button>
+                                </h2>
+                                <div id="collapseEEEYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 5</li>
+                                        <li class="list-group-item">Semester 6</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingEEEYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseEEEYear4">Year 4</button>
+                                </h2>
+                                <div id="collapseEEEYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 7</li>
+                                        <li class="list-group-item">Semester 8</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CIVIL -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingCIVIL">
+                        <button class="accordion-button" type="button" data-target="#collapseCIVIL" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Civil Engineering (CIVIL)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseCIVIL" class="accordion-body-content">
+                        <div class="year-accordion" id="civilYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear1">Year 1</button>
+                                </h2>
+                                <div id="collapseCIVILYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 1</li>
+                                        <li class="list-group-item">Semester 2</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear2">Year 2</button>
+                                </h2>
+                                <div id="collapseCIVILYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 3</li>
+                                        <li class="list-group-item">Semester 4</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear3">Year 3</button>
+                                </h2>
+                                <div id="collapseCIVILYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 5</li>
+                                        <li class="list-group-item">Semester 6</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingCIVILYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseCIVILYear4">Year 4</button>
+                                </h2>
+                                <div id="collapseCIVILYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 7</li>
+                                        <li class="list-group-item">Semester 8</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MECH -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingMECH">
+                        <button class="accordion-button" type="button" data-target="#collapseMECH" data-parent-accordion="#departmentsAccordion">
+                            <span class="text-xl">Mechanical Engineering (MECH)</span>
+                        </button>
+                    </h2>
+                    <div id="collapseMECH" class="accordion-body-content">
+                        <div class="year-accordion" id="mechYearsAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear1">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear1">Year 1</button>
+                                </h2>
+                                <div id="collapseMECHYear1" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 1</li>
+                                        <li class="list-group-item">Semester 2</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear2">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear2">Year 2</button>
+                                </h2>
+                                <div id="collapseMECHYear2" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 3</li>
+                                        <li class="list-group-item">Semester 4</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear3">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear3">Year 3</button>
+                                </h2>
+                                <div id="collapseMECHYear3" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 5</li>
+                                        <li class="list-group-item">Semester 6</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingMECHYear4">
+                                    <button class="accordion-button" type="button" data-target="#collapseMECHYear4">Year 4</button>
+                                </h2>
+                                <div id="collapseMECHYear4" class="accordion-body-content">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Semester 7</li>
+                                        <li class="list-group-item">Semester 8</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="backToHomeFromPortal" class="back-button w-full justify-center mt-8">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 0 1-.02 1.06L8.832 10l3.938 3.71a.75.75 0 1 1-1.04 1.08l-4.5-4.25a.75.75 0 0 1 0-1.08l4.5-4.25a.75.75 0 0 1 1.06.02Z" clip-rule="evenodd" />
+                </svg>
+                Back to Home
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full bg-gradient-to-r from-blue-900 to-indigo-950 text-white py-6 shadow-inner mt-auto">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-200">
+            <div class="mb-2 sm:mb-0 text-center sm:text-left">
+                &copy; 2025 <span class="font-semibold">Prince Shri Venkateshwara Padmavathy Engineering College</span>
+            </div>
+            <div class="text-center sm:text-right">
+                Powered by <span class="font-semibold">Agile Assembly</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Frontend logic scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
