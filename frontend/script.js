@@ -1,4 +1,4 @@
-const BASE_URL = window.API_BASE_URL || localStorage.getItem('api_base_url') || 'http://localhost:8080';
+const BASE_URL = window.API_BASE_URL || localStorage.getItem('api_base_url') || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:8080' : 'https://edu-portal-study.onrender.com');
 
 document.addEventListener('DOMContentLoaded', () => {
     // Screen sections
