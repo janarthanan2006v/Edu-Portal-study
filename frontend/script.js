@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = window.API_BASE_URL || localStorage.getItem('api_base_url') || 'http://localhost:8080';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Screen sections
